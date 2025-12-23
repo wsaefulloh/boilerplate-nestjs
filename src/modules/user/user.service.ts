@@ -1,28 +1,45 @@
-import { Injectable } from '@nestjs/common';
-import { UserRepository } from './user.repository';
-import { User } from 'src/database/models/user.model';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { User } from './user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(private repo: UserRepository) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly repo: Repository<User>,
+  ) { }
 
-  create(data: Partial<User>): Promise<User> {
-    return this.repo.create(data);
+  async create(data: Partial<User>): Promise<User> {
+    const user = this.repo.create(data);
+    return this.repo.save(user);
   }
 
   findAll(): Promise<User[]> {
-    return this.repo.findAll();
+    return this.repo.find();
   }
 
-  findOne(id: number): Promise<User> {
-    return this.repo.findOne(id);
+  async findOne(id: number): Promise<User> {
+    const user = await this.repo.findOne({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
-  update(id: number, data: Partial<User>): Promise<[number, User[]]> {
-    return this.repo.update(id, data);
+  async update(id: number, data: Partial<User>): Promise<User> {
+    await this.repo.update(id, data);
+    return this.findOne(id);
   }
 
-  delete(id: number): Promise<number> {
-    return this.repo.delete(id);
+  async delete(id: number): Promise<void> {
+    const result = await this.repo.delete(id);
+
+    if (result.affected === 0) {
+      throw new NotFoundException('User not found');
+    }
   }
 }

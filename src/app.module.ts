@@ -1,36 +1,34 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { SequelizeModule } from '@nestjs/sequelize';
-
+import { TypeOrmModule } from '@nestjs/typeorm';
 import databaseConfig from './config/database.config';
-import { User } from './database/models/user.model';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
+    // Configure ConfigModule to load database configuration
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [databaseConfig],
+      load: [databaseConfig]
     }),
 
-    SequelizeModule.forRootAsync({
-      imports: [ConfigModule],
+    // Configure TypeOrmModule with database connection settings
+    TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        dialect: 'mysql',
-        host: config.get('database.host'),
-        port: config.get('database.port'),
-        username: config.get('database.username'),
-        password: config.get('database.password'),
-        database: config.get('database.database'),
-        models: [User],
-        autoLoadModels: true,
-        synchronize: true, // untuk dev saja!
-        logging: false,
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get<string>('database.host'),
+        port: configService.get<number>('database.port'),
+        username: configService.get<string>('database.username'),
+        password: configService.get<string>('database.password'),
+        database: configService.get<string>('database.database'),
+        autoLoadEntities: true,
+        synchronize: false,
       }),
     }),
 
+    // Import Module
     UserModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
