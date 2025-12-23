@@ -11,3 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - TypeORM integration
 - MySQL connection configuration
 - Migration setup
+
+## [0.2.0] - 2025-12-24
+### Added
+- Hash passwords
+- Registration service
