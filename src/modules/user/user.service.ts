@@ -9,7 +9,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly repo: Repository<User>,
-  ) { }
+  ) {}
 
   async create(data: Partial<User>): Promise<User> {
     const user = this.repo.create(data);

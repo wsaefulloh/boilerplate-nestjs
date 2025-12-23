@@ -9,7 +9,7 @@ import { UserModule } from './modules/user/user.module';
     // Configure ConfigModule to load database configuration
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [databaseConfig]
+      load: [databaseConfig],
     }),
 
     // Configure TypeOrmModule with database connection settings
@@ -31,4 +31,4 @@ import { UserModule } from './modules/user/user.module';
     UserModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}
