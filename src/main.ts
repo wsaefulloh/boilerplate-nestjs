@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -10,6 +11,7 @@ async function bootstrap() {
   process.env.TZ = process.env.TZ || 'Asia/Jakarta';
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const loggerService = app.get(LoggerService);
+  app.use(cookieParser());
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter(loggerService));
   app.useGlobalPipes(

@@ -16,7 +16,7 @@ export class LoggerService {
           return `[${timestamp}] ${level.toUpperCase()}: ${message} ${Object.keys(meta).length ? JSON.stringify(meta, null, 2) : ''}`;
         }),
       ),
-      defaultMeta: { service: 'be-cashier-sogi' },
+      defaultMeta: { service: process.env.APP_NAME || 'nestjs-app' },
       transports: [
         new winston.transports.File({
           filename: path.join('logs', 'error.log'),
