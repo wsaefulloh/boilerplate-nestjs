@@ -7,38 +7,15 @@ import { User } from './user.entity';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly repo: Repository<User>,
+    private readonly userRepo: Repository<User>,
   ) {}
 
-  async create(data: Partial<User>): Promise<User> {
-    const user = this.repo.create(data);
-    return this.repo.save(user);
-  }
-
-  findAll(): Promise<User[]> {
-    return this.repo.find();
-  }
-
-  async findOne(id: number): Promise<User> {
-    const user = await this.repo.findOne({ where: { id } });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    return user;
-  }
-
-  async update(id: number, data: Partial<User>): Promise<User> {
-    await this.repo.update(id, data);
-    return this.findOne(id);
-  }
-
-  async delete(id: number): Promise<void> {
-    const result = await this.repo.delete(id);
-
-    if (result.affected === 0) {
-      throw new NotFoundException('User not found');
+  async createUser(data: Partial<User>): Promise<User> {
+    try {
+      const user = this.userRepo.create(data);
+      return await this.userRepo.save(user);
+    } catch (error) {
+      throw error;
     }
   }
 }

@@ -8,15 +8,18 @@ export class AuthService {
   constructor(private readonly userService: UserService) {}
 
   async register(dto: RegisterDto) {
-    const hashedPassword = await hashPassword(dto.password);
-
-    const user = await this.userService.create({
-      name: dto.name,
-      email: dto.email,
-      password: hashedPassword,
-      isActive: true,
-    });
-
-    return user;
+    try {
+      // Hash the password before saving the user
+      const hashedPassword = await hashPassword(dto.password);
+      // Create the user with the hashed password
+      return await this.userService.createUser({
+        name: dto.name,
+        email: dto.email,
+        password: hashedPassword,
+        isActive: true,
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 }
