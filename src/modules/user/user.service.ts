@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { hashPassword } from 'src/common/utils/password.util';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -39,5 +41,22 @@ export class UserService {
 
   async findByEmail(email: string): Promise<User> {
     return await this.findOne({ email });
+  }
+
+  async updateUser(dto: UpdateUserDto, user_id: number): Promise<User> {
+    try {
+      const hashedPassword = await hashPassword(dto.password);
+      await this.userRepo.update(
+        { id: user_id },
+        {
+          ...dto,
+          password: hashedPassword,
+        },
+      );
+
+      return this.findById(user_id);
+    } catch (error) {
+      throw error;
+    }
   }
 }
