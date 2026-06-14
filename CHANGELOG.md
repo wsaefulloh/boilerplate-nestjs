@@ -19,7 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [1.0.0] - 2026-06-14
 ### Added
-### Added
 - JWT Authentication
 - User CRUD Module
 - Product CRUD Module
