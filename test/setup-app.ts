@@ -1,15 +1,14 @@
+import {
+  INestApplication,
+  ValidationPipe,
+  BadRequestException,
+} from '@nestjs/common';
 import cookieParser from 'cookie-parser';
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from 'src/app.module';
-import { NestExpressApplication } from '@nestjs/platform-express';
 import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
 import { HttpExceptionFilter } from 'src/common/filters/http-exception.filter';
-import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { LoggerService } from 'src/common/loggers/logger.service';
 
-async function bootstrap() {
-  process.env.TZ = process.env.TZ || 'Asia/Jakarta';
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+export function setupTestApp(app: INestApplication) {
   const loggerService = app.get(LoggerService);
   app.use(cookieParser());
   app.useGlobalInterceptors(new TransformInterceptor());
@@ -21,13 +20,11 @@ async function bootstrap() {
       transform: true,
       exceptionFactory: (errors) => {
         const formattedErrors = {};
-
         errors.forEach((error) => {
           formattedErrors[error.property] = Object.values(
             error.constraints ?? {},
           );
         });
-
         return new BadRequestException({
           success: false,
           message: 'Validation failed',
@@ -36,6 +33,5 @@ async function bootstrap() {
       },
     }),
   );
-  await app.listen(process.env.PORT ?? 3000);
+  return app;
 }
-bootstrap();

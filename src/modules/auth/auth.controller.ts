@@ -2,7 +2,6 @@ import {
   Controller,
   Post,
   Body,
-  ConflictException,
   InternalServerErrorException,
   HttpException,
   Res,
@@ -10,8 +9,8 @@ import {
   UnauthorizedException,
   HttpCode,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/register.dto';
+import { AuthService } from 'src/modules/auth/auth.service';
+import { RegisterDto } from 'src/modules/auth/dto/register.dto';
 import { Request, Response } from 'express';
 
 @Controller('auth')
@@ -27,10 +26,6 @@ export class AuthController {
       // Re-throw known HTTP exceptions
       if (error instanceof HttpException) {
         throw error;
-      }
-      // Handle duplicate email error
-      if ((error as any)?.code === 'ER_DUP_ENTRY') {
-        throw new ConflictException('Email already registered');
       }
       // Log unexpected errors and throw a generic internal server error
       throw new InternalServerErrorException('Failed to register user');

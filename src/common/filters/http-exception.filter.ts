@@ -7,7 +7,7 @@ import {
   Inject,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { LoggerService } from '../loggers/logger.service';
+import { LoggerService } from 'src/common/loggers/logger.service';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {

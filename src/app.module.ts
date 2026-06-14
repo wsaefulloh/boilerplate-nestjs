@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import databaseConfig from './config/database.config';
-import { UserModule } from './modules/user/user.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { LoggerModule } from './common/loggers/logger.module';
-import { ProductModule } from './modules/product/product.module';
+import databaseConfig from 'src/config/database.config';
+import { UserModule } from 'src/modules/user/user.module';
+import { AuthModule } from 'src/modules/auth/auth.module';
+import { LoggerModule } from 'src/common/loggers/logger.module';
+import { ProductModule } from 'src/modules/product/product.module';
 
 @Module({
   imports: [

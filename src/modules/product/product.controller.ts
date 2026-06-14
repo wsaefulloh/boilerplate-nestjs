@@ -13,12 +13,12 @@ import {
   Query,
   ParseIntPipe,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { JwtUser } from '../auth/interfaces/jwt-user.interface';
-import { ProductService } from './product.service';
-import { ProductQueryDto } from './dto/query-product.dto';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
+import { JwtUser } from 'src/modules/auth/interfaces/jwt-user.interface';
+import { ProductService } from 'src/modules/product/product.service';
+import { ProductQueryDto } from 'src/modules/product/dto/query-product.dto';
+import { CreateProductDto } from 'src/modules/product/dto/create-product.dto';
+import { UpdateProductDto } from 'src/modules/product/dto/update-product.dto';
 
 @Controller('products')
 export class ProductController {

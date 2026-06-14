@@ -1,6 +1,5 @@
 import {
   Body,
-  ConflictException,
   Controller,
   Get,
   HttpException,
@@ -10,10 +9,10 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { JwtUser } from '../auth/interfaces/jwt-user.interface';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UserService } from 'src/modules/user/user.service';
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
+import { JwtUser } from 'src/modules/auth/interfaces/jwt-user.interface';
+import { UpdateUserDto } from 'src/modules/user/dto/update-user.dto';
 
 @Controller('users')
 export class UserController {
@@ -60,10 +59,6 @@ export class UserController {
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
-      }
-      // Handle duplicate email error
-      if ((error as any)?.code === 'ER_DUP_ENTRY') {
-        throw new ConflictException('Email already registered');
       }
       throw new InternalServerErrorException('Failed to update user');
     }

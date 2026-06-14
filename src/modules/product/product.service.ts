@@ -1,16 +1,16 @@
 import {
   ConflictException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, Like, Not } from 'typeorm';
-import { Product } from './product.entity';
-import { CreateProductDto } from './dto/create-product.dto';
-import { User } from '../user/user.entity';
-import { ProductQueryDto } from './dto/query-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { Product } from 'src/modules/product/product.entity';
+import { CreateProductDto } from 'src/modules/product/dto/create-product.dto';
+import { User } from 'src/modules/user/user.entity';
+import { ProductQueryDto } from 'src/modules/product/dto/query-product.dto';
+import { UpdateProductDto } from 'src/modules/product/dto/update-product.dto';
+import { LoggerService } from 'src/common/loggers/logger.service';
 
 @Injectable()
 export class ProductService {
@@ -20,6 +20,7 @@ export class ProductService {
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
     private readonly dataSource: DataSource,
+    private readonly logger: LoggerService, // inject Winston logger
   ) {}
 
   async create(dto: CreateProductDto, userEmail: string) {
@@ -70,12 +71,8 @@ export class ProductService {
         };
       });
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      throw new InternalServerErrorException(
-        error instanceof Error ? error.message : 'Failed to create product',
-      );
+      this.logger.error(error instanceof Error ? error.message : String(error));
+      throw error;
     }
   }
 
@@ -109,9 +106,8 @@ export class ProductService {
         },
       };
     } catch (error) {
-      throw new InternalServerErrorException(
-        error instanceof Error ? error.message : 'Failed to fetch products',
-      );
+      this.logger.error(error instanceof Error ? error.message : String(error));
+      throw error;
     }
   }
 
@@ -158,9 +154,8 @@ export class ProductService {
         },
       };
     } catch (error) {
-      throw new InternalServerErrorException(
-        error instanceof Error ? error.message : 'Failed to fetch products',
-      );
+      this.logger.error(error instanceof Error ? error.message : String(error));
+      throw error;
     }
   }
 
@@ -180,9 +175,8 @@ export class ProductService {
 
       return product;
     } catch (error) {
-      throw new InternalServerErrorException(
-        error instanceof Error ? error.message : 'Failed to fetch product',
-      );
+      this.logger.error(error instanceof Error ? error.message : String(error));
+      throw error;
     }
   }
 
@@ -263,47 +257,48 @@ export class ProductService {
         };
       });
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      throw new InternalServerErrorException(
-        error instanceof Error ? error.message : 'Failed to create product',
-      );
+      this.logger.error(error instanceof Error ? error.message : String(error));
+      throw error;
     }
   }
 
-  async softDelete(product_id: number, userEmail: string) {
-    const userLogin = await this.userRepo.findOne({
-      where: {
-        email: userEmail,
-      },
-    });
-
-    // Check if user exists
-    if (!userLogin) {
-      throw new NotFoundException('User not found');
-    }
-
-    const product = await this.productRepo.findOne({
-      where: {
-        user: {
-          id: userLogin.id,
+  async softDelete(productId: number, userEmail: string) {
+    try {
+      const userLogin = await this.userRepo.findOne({
+        where: {
+          email: userEmail,
         },
-        id: product_id,
-        deletedAt: null,
-      },
-    });
+      });
 
-    if (!product) {
-      throw new NotFoundException('Product not found');
+      // Check if user exists
+      if (!userLogin) {
+        throw new NotFoundException('User not found');
+      }
+
+      const product = await this.productRepo.findOne({
+        where: {
+          user: {
+            id: userLogin.id,
+          },
+          id: productId,
+          deletedAt: null,
+        },
+      });
+
+      if (!product) {
+        throw new NotFoundException('Product not found');
+      }
+
+      await this.productRepo.update(product.id, {
+        deletedAt: new Date(),
+      });
+
+      return {
+        message: 'Product deleted successfully',
+      };
+    } catch (error) {
+      this.logger.error(error instanceof Error ? error.message : String(error));
+      throw error;
     }
-
-    await this.productRepo.update(product.id, {
-      deletedAt: new Date(),
-    });
-
-    return {
-      message: 'Product deleted successfully',
-    };
   }
 }

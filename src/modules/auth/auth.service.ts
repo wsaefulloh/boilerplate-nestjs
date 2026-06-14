@@ -1,21 +1,20 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import {
-  hashPassword,
-  comparePassword,
-} from '../../common/utils/password.util';
-import { RegisterDto } from './dto/register.dto';
-import { UserService } from '../user/user.service';
-import { JwtPayload } from './interfaces/jwt-payload.interface';
-import { User } from '../user/user.entity';
+import { hashPassword, comparePassword } from 'src/common/utils/password.util';
+import { RegisterDto } from 'src/modules/auth/dto/register.dto';
+import { UserService } from 'src/modules/user/user.service';
+import { JwtPayload } from 'src/modules/auth/interfaces/jwt-payload.interface';
+import { User } from 'src/modules/user/user.entity';
 import { StringValue } from 'ms';
 import { JsonWebTokenError, JwtService, TokenExpiredError } from '@nestjs/jwt';
-import { JwtRefreshPayload } from './interfaces/jwt-refresh-payload.interface';
+import { JwtRefreshPayload } from 'src/modules/auth/interfaces/jwt-refresh-payload.interface';
+import { LoggerService } from 'src/common/loggers/logger.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private jwtService: JwtService,
+    private readonly logger: LoggerService, // inject Winston logger
   ) {}
 
   async register(dto: RegisterDto) {
@@ -30,6 +29,7 @@ export class AuthService {
         isActive: true,
       });
     } catch (error) {
+      this.logger.error(error instanceof Error ? error.message : String(error));
       throw error;
     }
   }
@@ -43,6 +43,7 @@ export class AuthService {
       }
       return user;
     } catch (error) {
+      this.logger.error(error instanceof Error ? error.message : String(error));
       throw error;
     }
   }
@@ -55,6 +56,7 @@ export class AuthService {
       };
       return this.jwtService.sign(payload);
     } catch (error) {
+      this.logger.error(error instanceof Error ? error.message : String(error));
       throw error;
     }
   }
@@ -67,6 +69,7 @@ export class AuthService {
         expiresIn: process.env.JWT_SECRET_EXPIRES_IN as StringValue,
       });
     } catch (error) {
+      this.logger.error(error instanceof Error ? error.message : String(error));
       throw error;
     }
   }
@@ -79,6 +82,7 @@ export class AuthService {
         refreshToken: this.generateRefreshToken(user),
       };
     } catch (error) {
+      this.logger.error(error instanceof Error ? error.message : String(error));
       throw error;
     }
   }
@@ -93,6 +97,7 @@ export class AuthService {
         accessToken: this.generateAccessToken(user),
       };
     } catch (error) {
+      this.logger.error(error instanceof Error ? error.message : String(error));
       if (
         error instanceof TokenExpiredError ||
         error instanceof JsonWebTokenError
