@@ -5,23 +5,33 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  Index,
+  JoinColumn,
+  ManyToOne,
+  Generated,
 } from 'typeorm';
+import { User } from '../user/user.entity';
 
-@Entity('users')
-export class User {
+@Entity('products')
+export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 100 })
+  @Column({ type: 'uuid', unique: true })
+  @Generated('uuid')
+  uuid: string;
+
+  @Column({ length: 500, nullable: false })
   name: string;
 
-  @Index({ unique: true })
-  @Column({ length: 150 })
-  email: string;
-
   @Column()
-  password: string;
+  price: number;
+
+  @Column({ length: 1000 })
+  description: string;
+
+  @ManyToOne(() => User, { nullable: true, onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @Column({ name: 'is_active', type: 'boolean', default: true })
   isActive: boolean;
