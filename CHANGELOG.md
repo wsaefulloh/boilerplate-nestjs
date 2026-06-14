@@ -16,3 +16,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Added
 - Hash passwords
 - Registration Auth service
+
+## [1.0.0] - 2026-06-14
+### Added
+### Added
+- JWT Authentication
+- User CRUD Module
+- Product CRUD Module
+- TypeORM Integration
+- MySQL Support
+- Database Migration Management
+- Global Exception Filter
+- Response Transform Interceptor
+- Winston Logger
+- Rate Limiting
+- Environment Configuration
+- Jest Testing Setup
+- Husky & Commitlint
+- Postman Collection

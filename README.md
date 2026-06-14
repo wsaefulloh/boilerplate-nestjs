@@ -1,29 +1,17 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
-
-<h1 align="center">NestJS + TypeORM + MySQL Starter Template</h1>
-
-<p align="center">
-  Starter template for building scalable backend applications with NestJS, TypeORM, and MySQL.
-</p>
-
-<p align="center">
-  <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/badge/npm-v10.8.2-blue" alt="NPM Version" /></a>
+# 🚀 Boilerplate NestJS
+  <img src="https://img.shields.io/badge/GitHub-Template-blue" alt="Template" />
   <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
   <img src="https://img.shields.io/badge/node-%3E%3D20.19-brightgreen" alt="Node Version" />
+  <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/badge/npm-v10.8.2-blue" alt="NPM Version" /></a>
   <img src="https://img.shields.io/badge/TypeScript-v5.9-blue" alt="TypeScript" />
   <img src="https://img.shields.io/badge/TypeORM-v0.3.x-2D3748" alt="TypeORM" />
-</p>
 
----
-
-# 🚀 Boilerplate NestJS
+## NestJS + TypeORM + MySQL Starter Template
 
 A production-ready NestJS boilerplate featuring JWT Authentication, TypeORM, MySQL, Database Migrations, Winston Logging, Rate Limiting, Global Exception Handling, and Jest Testing.
-
 This project provides a scalable and maintainable foundation for building modern REST APIs using NestJS while following best practices for security, logging, testing, and database management.
 
+> 💡 This repository is a GitHub Template. Click **Use this template** to create a new project with all configurations and best practices already set up.
 ---
 
 ## ✨ Features
