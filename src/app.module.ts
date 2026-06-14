@@ -1,9 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import databaseConfig from './config/database.config';
-import { UserModule } from './modules/users/users.module';
-import { AuthModule } from './modules/auth/auth.module';
+import databaseConfig from 'src/config/database.config';
+import { UserModule } from 'src/modules/user/user.module';
+import { AuthModule } from 'src/modules/auth/auth.module';
+import { LoggerModule } from 'src/common/loggers/logger.module';
+import { ProductModule } from 'src/modules/product/product.module';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -28,9 +33,25 @@ import { AuthModule } from './modules/auth/auth.module';
       }),
     }),
 
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000, // 60 second
+        limit: 10, // Max 10 request
+      },
+    ]),
+
     // Import Module
     UserModule,
     AuthModule,
+    LoggerModule,
+    ProductModule,
+  ],
+
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
 })
 export class AppModule {}
