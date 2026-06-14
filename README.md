@@ -1,10 +1,13 @@
-# 🚀 Boilerplate NestJS
+<h1 align="center">🚀 Boilerplate NestJS</h1>
+
+<p align="center">
   <img src="https://img.shields.io/badge/GitHub-Template-blue" alt="Template" />
-  <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
   <img src="https://img.shields.io/badge/node-%3E%3D20.19-brightgreen" alt="Node Version" />
-  <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/badge/npm-v10.8.2-blue" alt="NPM Version" /></a>
+  <img src="https://img.shields.io/badge/npm-v10.8.2-blue" alt="NPM Version" />
   <img src="https://img.shields.io/badge/TypeScript-v5.9-blue" alt="TypeScript" />
   <img src="https://img.shields.io/badge/TypeORM-v0.3.x-2D3748" alt="TypeORM" />
+  <img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="License" />
+</p>
 
 ## NestJS + TypeORM + MySQL Starter Template
 
@@ -303,7 +306,7 @@ npm run test:e2e
 A Postman collection is available at:
 
 ```text
-Bolierplate NestJs by Wahyu Saefulloh.postman_collection.json
+boilerplate_nestjs.postman_collection.json
 ```
 
 ---
