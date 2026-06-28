@@ -33,3 +33,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Jest Testing Setup
 - Husky & Commitlint
 - Postman Collection
+
+## [1.1.0] - 2026-06-28
+### Added
+- Docker support
+- Docker Compose setup
+- Makefile commands
+- Automatic .env initialization
+- Automatic JWT secret generation
+- Updated documentation
